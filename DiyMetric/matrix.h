@@ -3,8 +3,8 @@
 
 #include <Arduino.h>
 #include <Adafruit_GFX.h>
-#include <Adafruit_NeoMatrix.h>
 #include <Adafruit_NeoPixel.h>
+#include <Adafruit_NeoMatrix.h>
 
 #include "font.h"
 
@@ -25,7 +25,7 @@ uint32_t defaultFontColor = getColor(255,0,0);
 // TEXT STUFF
 String Text = "";
 int16_t textX,textY;
-uint16_t textWidth,textHeight;
+uint16_t textWidth, textHeight;
 ////////////////////////////
 
 void clearScreen(){
@@ -42,8 +42,6 @@ void initMatrix(){
     ledMatrix.setTextWrap(false);
     ledMatrix.setBrightness(brightness);
     ledMatrix.setTextColor(defaultFontColor);
-    clearScreen();
-    drawScreen();
 }
 
 uint16_t getTextWidth(String text){

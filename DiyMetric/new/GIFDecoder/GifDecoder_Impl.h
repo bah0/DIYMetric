@@ -7,6 +7,7 @@
 
     Copyright (c) 2014 Craig A. Lindley
     Minor modifications by Louis Beaudoin (pixelmatix)
+    Additional modifications by Bahadir Parmaksiz (bah0)
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of
     this software and associated documentation files (the "Software"), to deal in
@@ -89,6 +90,10 @@
 #define DISPOSAL_RESTORE    3
 
 
+template <int maxGifWidth, int maxGifHeight, int lzwMaxBits>
+void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::setImageCallback(ImageCallback *f) {
+    imageCallback = f;
+}
 
 template <int maxGifWidth, int maxGifHeight, int lzwMaxBits>
 void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::setStartDrawingCallback(callback f) {
@@ -97,12 +102,12 @@ void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::setStartDrawingCallback(
 
 template <int maxGifWidth, int maxGifHeight, int lzwMaxBits>
 void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::setUpdateScreenCallback(callback f) {
-    updateScreenCallback = f;
+    imageCallback->updateScreenCallback = f;
 }
 
 template <int maxGifWidth, int maxGifHeight, int lzwMaxBits>
 void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::setDrawPixelCallback(pixel_callback f) {
-    drawPixelCallback = f;
+    imageCallback->drawPixelCallback = f;
 }
 
 template <int maxGifWidth, int maxGifHeight, int lzwMaxBits>
@@ -117,35 +122,35 @@ void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::setScreenClearCallback(c
 
 template <int maxGifWidth, int maxGifHeight, int lzwMaxBits>
 void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::setFileSeekCallback(file_seek_callback f) {
-    fileSeekCallback = f;
+    imageCallback->fileSeekCallback = f;
 }
 
 template <int maxGifWidth, int maxGifHeight, int lzwMaxBits>
 void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::setFilePositionCallback(file_position_callback f) {
-    filePositionCallback = f;
+    imageCallback->filePositionCallback = f;
 }
 
 template <int maxGifWidth, int maxGifHeight, int lzwMaxBits>
 void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::setFileReadCallback(file_read_callback f) {
-    fileReadCallback = f;
+    imageCallback->fileReadCallback = f;
 }
 
 template <int maxGifWidth, int maxGifHeight, int lzwMaxBits>
 void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::setFileReadBlockCallback(file_read_block_callback f) {
-    fileReadBlockCallback = f;
+    imageCallback->fileReadBlockCallback = f;
 }
 
 // Backup the read stream by n bytes
 template <int maxGifWidth, int maxGifHeight, int lzwMaxBits>
 void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::backUpStream(int n) {
-    fileSeekCallback(filePositionCallback() - n);
+    imageCallback->fileSeekCallback(imageCallback->filePositionCallback() - n);
 }
 
 // Read a file byte
 template <int maxGifWidth, int maxGifHeight, int lzwMaxBits>
 int GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::readByte() {
 
-    int b = fileReadCallback();
+    int b = imageCallback->fileReadCallback();
     if (b == -1) {
 #if GIFDEBUG == 1
         Serial.println("Read error or EOF occurred");
@@ -167,7 +172,7 @@ int GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::readWord() {
 template <int maxGifWidth, int maxGifHeight, int lzwMaxBits>
 int GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::readIntoBuffer(void *buffer, int numberOfBytes) {
 
-    int result = fileReadBlockCallback(buffer, numberOfBytes);
+    int result = imageCallback->fileReadBlockCallback(buffer, numberOfBytes);
     if (result == -1) {
         Serial.println("Read error or EOF occurred");
     }
@@ -442,7 +447,7 @@ void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::parseTableBasedImage() {
 
 #if GIFDEBUG == 1 && DEBUG_PARSING_DATA == 1
     Serial.println("File Position: ");
-    Serial.println(filePositionCallback());
+    Serial.println(imageCallback->filePositionCallback());
     Serial.println("File Size: ");
     //Serial.println(file.size());
 #endif
@@ -566,10 +571,10 @@ void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::parseTableBasedImage() {
     Serial.print("LzwCodeSize: ");
     Serial.println(lzwCodeSize);
     Serial.println("File Position Before: ");
-    Serial.println(filePositionCallback());
+    Serial.println(imageCallback->filePositionCallback());
 #endif
 
-    unsigned long filePositionBefore = filePositionCallback();
+    unsigned long filePositionBefore = imageCallback->filePositionCallback();
 
     // Gather the lzw image data
     // NOTE: the dataBlockSize byte is left in the data as the lzw decoder needs it
@@ -582,7 +587,7 @@ void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::parseTableBasedImage() {
 #endif
         backUpStream(1);
         dataBlockSize++;
-        fileSeekCallback(filePositionCallback() + dataBlockSize);
+        imageCallback->fileSeekCallback(imageCallback->filePositionCallback() + dataBlockSize);
 
         offset += dataBlockSize;
         dataBlockSize = readByte();
@@ -592,13 +597,13 @@ void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::parseTableBasedImage() {
     Serial.print("total lzwImageData Size: ");
     Serial.println(offset);
     Serial.println("File Position Test: ");
-    Serial.println(filePositionCallback());
+    Serial.println(imageCallback->filePositionCallback());
 #endif
 
     // this is the position where GIF decoding needs to pick up after decompressing frame
-    unsigned long filePositionAfter = filePositionCallback();
+    unsigned long filePositionAfter = imageCallback->filePositionCallback();
 
-    fileSeekCallback(filePositionBefore);
+    imageCallback->fileSeekCallback(filePositionBefore);
 
     // Process the animation frame for display
 
@@ -710,7 +715,7 @@ int GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::startDecoding(void) {
     prevDisposalMethod = DISPOSAL_NONE;
     transparentColorIndex = NO_TRANSPARENT_INDEX;
     nextFrameTime_ms = 0;
-    fileSeekCallback(0);
+    imageCallback->fileSeekCallback(0);
 
     // Validate the header
     if (! parseGifHeader()) {
@@ -746,7 +751,7 @@ int GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::decodeFrame(void) {
         prevDisposalMethod = DISPOSAL_NONE;
         transparentColorIndex = NO_TRANSPARENT_INDEX;
         nextFrameTime_ms = 0;
-        fileSeekCallback(0);
+        imageCallback->fileSeekCallback(0);
 
         // parse Gif Header like with a new file
         parseGifHeader();
@@ -798,7 +803,7 @@ void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::decompressAndDisplayFram
 
 #if GIFDEBUG == 1 && DEBUG_DECOMPRESS_AND_DISPLAY == 1
     Serial.println("File Position After: ");
-    Serial.println(filePositionCallback());
+    Serial.println(imageCallback->filePositionCallback());
 #endif
 
 #if GIFDEBUG == 1 && DEBUG_WAIT_FOR_KEY_PRESS == 1
@@ -807,7 +812,7 @@ void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::decompressAndDisplayFram
 #endif
 
     // LZW doesn't parse through all the data, manually set position
-    fileSeekCallback(filePositionAfter);
+    imageCallback->fileSeekCallback(filePositionAfter);
 
     // Optional callback can be used to get drawing routines ready
     if (startDrawingCallback)
@@ -827,8 +832,8 @@ void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::decompressAndDisplayFram
             }
 
             // Pixel not transparent so get color from palette and draw the pixel
-            if (drawPixelCallback)
-                (*drawPixelCallback)(x, y, palette[pixel].red, palette[pixel].green, palette[pixel].blue);
+            if (imageCallback->drawPixelCallback)
+                (*imageCallback->drawPixelCallback)(x, y, palette[pixel].red, palette[pixel].green, palette[pixel].blue);
         }
     }
 #else
@@ -842,7 +847,7 @@ void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::decompressAndDisplayFram
     cycleTime += (frameDelay < 2) ? 20 : frameDelay * 10;
 #if GIFDEBUG > 2
     char buf[80];
-    unsigned long filePositionBefore = filePositionCallback();
+    unsigned long filePositionBefore = imageCallback->filePositionCallback();
     if (frameNo == 1) {
         sprintf(buf, "Logical Screen [LZW=%d %dx%d P:0x%02X B:%d A:%d F:%dms] frames:%d pass=%d",
                 lzwCodeSize, lsdWidth, lsdHeight, lsdPackedField, lsdBackgroundIndex, lsdAspectRatio,
@@ -873,18 +878,18 @@ void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::decompressAndDisplayFram
             int skip = (disposalMethod == DISPOSAL_BACKGROUND) ? -1 : transparentColorIndex;;
             if (drawLineCallback) {
                 (*drawLineCallback)(xofs, line + tbiImageY, imageBuf + xofs, wid, palette565, skip);
-            } else if (drawPixelCallback) {
+            } else if (imageCallback) {
                 for (int x = 0; x < wid; x++) {
                     uint8_t pixel = imageBuf[x + xofs];
                     if ((pixel != skip))
-                        (*drawPixelCallback)(x + xofs, line + tbiImageY,
+                        (imageCallback->drawPixelCallback)(x + xofs, line + tbiImageY,
                                              palette[pixel].red, palette[pixel].green, palette[pixel].blue);
                 }
             }
         }
     }
     // LZW doesn't parse through all the data, manually set position
-    fileSeekCallback(filePositionAfter);
+    imageCallback->fileSeekCallback(filePositionAfter);
 #if GIFDEBUG > 3
     extern int32_t parse_start;
     Serial.println((micros() - parse_start) / 1000);
@@ -900,7 +905,7 @@ void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits>::decompressAndDisplayFram
 
     // calculate time to display next frame
     nextFrameTime_ms = millis() + (10 * frameDelay);
-    if (updateScreenCallback)
-        (*updateScreenCallback)();
+    if (imageCallback->updateScreenCallback)
+        (*imageCallback->updateScreenCallback)();
 */
 }

@@ -5,6 +5,7 @@
 #define USE_PALETTE565
 
 #include <stdint.h>
+#include "../Image.hpp"
 
 typedef void (*callback)(void);
 typedef void (*pixel_callback)(int16_t x, int16_t y, uint8_t red, uint8_t green, uint8_t blue);
@@ -51,6 +52,7 @@ public:
     void setFilePositionCallback(file_position_callback f);
     void setFileReadCallback(file_read_callback f);
     void setFileReadBlockCallback(file_read_block_callback f);
+    void setImageCallback(ImageCallback *f);
 
 private:
     void parseTableBasedImage(void);
@@ -136,6 +138,7 @@ private:
     file_position_callback filePositionCallback;
     file_read_callback fileReadCallback;
     file_read_block_callback fileReadBlockCallback;
+    ImageCallback *imageCallback;
 
     // LZW variables
     int bbits;

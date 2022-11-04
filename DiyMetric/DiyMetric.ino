@@ -11,18 +11,17 @@
 #include "ntp.h"
 
 #include "upng.h"
-#include "GifDecoder.h"
+#include "new/App.hpp"
+#include "new/WifiConnection.hpp"
 
 #define PNGBUF(x) upng_get_buffer(x)
 #define DEBUG
 
-GifDecoder<9, 9, 11> decoder;
-uint16_t ptrCursor = 0;
+//GifDecoder<9, 9, 11> decoder;
+//uint16_t ptrCursor = 0;
 File fileGif;
 
 Ticker timeTicker;
-// define programmer !!!
-#define BAHO
 
 utime espTime{0, 0, 0, 0};
 String inputString = "";
@@ -48,7 +47,7 @@ enum eimgType
 typedef enum eimgType imgtype;
 imgtype displayIMG;
 
-//TextOnly sample("Hello",0,0);
+// TextOnly sample("Hello",0,0);
 FrameText sample("Hello", 0, 0);
 
 uint16_t secs = 0;
@@ -56,8 +55,10 @@ const uint16_t max_secs = 86400; // 60*60*24
 bool refreshTime = false;
 String time_str = "";
 
-uint8_t currentFrame, lastFrame;
+//uint8_t currentFrame, lastFrame;
 bool stopCode = false;
+
+App app;
 
 void updateTime()
 {
@@ -97,13 +98,13 @@ void refreshUtime()
 
 void setup()
 {
-  unsigned long setupttime = millis();
+  app.Setup();
+  /* */
+  /*unsigned long setupttime = millis();
 
   Serial.begin(9600);
   delay(200);
-#ifdef BAHO
-  wifi_connect("ssid", "password");
-#endif
+
 
   ntp_client_setup();
   timeTicker.attach(1, updateTime);
@@ -115,28 +116,27 @@ void setup()
 
   inputString.reserve(200);
 
-  Serial.printf("\nHEAP SPACE AVAILABLE: %d bytes", ESP.getFreeHeap());
-  Serial.printf("\nHEAP SPACE AVAILABLE: %d bytes", ESP.getFreeHeap());
-  Serial.printf("\nESP RESET REASON: %s ", ESP.getResetReason().c_str());
-  Serial.printf("\nESP SKETCH SIZE: %d ", ESP.getSketchSize());
-  Serial.printf("\nESP SKETCH SPACE AVAILABLE: %d ", ESP.getFreeSketchSpace());
-  Serial.printf("\nESP FLASH SIZE: %d ", ESP.getFlashChipSize());
+  // Serial.printf("\nHEAP SPACE AVAILABLE: %d bytes", ESP.getFreeHeap());
+  // Serial.printf("\nHEAP SPACE AVAILABLE: %d bytes", ESP.getFreeHeap());
+  // Serial.printf("\nESP RESET REASON: %s ", ESP.getResetReason().c_str());
+  // Serial.printf("\nESP SKETCH SIZE: %d ", ESP.getSketchSize());
+  // Serial.printf("\nESP SKETCH SPACE AVAILABLE: %d ", ESP.getFreeSketchSpace());
+  // Serial.printf("\nESP FLASH SIZE: %d ", ESP.getFlashChipSize());
 
   initMatrix();
   displayIMG = noType;
   FrameText sample("Hello", 0, 0);
 
   // Test Path: https://developer.lametric.com/content/apps/icon_thumbs/34.png
-  // http://i.imgur.com/s3IDC4n.png"
   // "http://developer.lametric.com/content/apps/icon_thumbs/7646.png" 620 ok - 4948 nok
   // downloadBitmap("http://developer.lametric.com/content/apps/icon_thumbs/3061.png");
 
-  downloadBitmap("http://developer.lametric.com/content/apps/icon_thumbs/230.gif");
+  downloadBitmap("http://developer.lametric.com/content/apps/icon_thumbs/1443.gif");
 
   if (contentType == "image/png")
   {
     displayIMG = PNGtype;
-    //upng_allocation();
+    // upng_allocation();
     upngCallback();
   }
   if (contentType == "image/gif")
@@ -151,6 +151,7 @@ void setup()
   lastTime = 0;
   currentTime = millis();
   loopTime = millis();
+  */
 }
 
 void serialEvent()
@@ -182,43 +183,40 @@ void render(/* double dT */)
           ledMatrix.drawPixel(i, j, rgbacol.rgba);
         }
     }
+  drawScreen();
   }
 
-  if (displayIMG == GIFtype)
-  {
-    decoder.decodeFrame();
-    currentFrame = decoder.getFrameNo();
-    if (currentFrame == lastFrame)
-    {
-      decoder.decodeFrame();
-      currentFrame = decoder.getFrameNo();
-    }
-    lastFrame = currentFrame;
-    
-    drawScreen();
-    delay(decoder.getFrameDelay_ms());
-  }
-  drawScreen();
+  // if (displayIMG == GIFtype)
+  // {
+  //   decoder.decodeFrame();
+  //   currentFrame = decoder.getFrameNo();
+  //   if (currentFrame == lastFrame)
+  //   {
+  //     decoder.decodeFrame();
+  //     currentFrame = decoder.getFrameNo();
+  //   }
+  //   lastFrame = currentFrame;
+
+  //   drawScreen();
+  //   delay(decoder.getFrameDelay_ms());
+  // }
 }
 
 void loop()
-{
-  deltaTime = calcTime();
-  unsigned long loopDT = (millis() - loopTime);
+{    
+  app.Loop();
+  /* 
   serialEvent();
   refreshUtime();
 
   update(deltaTime);
   render();
+  */
 
-    if(stopCode){
-    finish();
-  }
-
-  //delay(50);
 }
 
-void finish(){
+void finish()
+{
   fileGif.close();
   LittleFS.end();
 }
@@ -251,49 +249,39 @@ void upngCallback()
   }
 }
 
-
-void gif_allocation(){
-bool fsformat;
+void gif_allocation()
+{
+  bool fsformat;
   // if(!LittleFS.format()){
   //   Serial.println("Could not format FS");
   //   fsformat = false;
   // }
   bool xex = false;
   // if(!fsformat )
-    if(!LittleFS.begin()){
-      Serial.println("Could not format FS");
-    } else {
-      xex = LittleFS.exists("/test.gif");
-    }
-  
-  
+  if (!LittleFS.begin())
+  {
+    Serial.println("Could not format FS");
+  }
+  else
+  {
+    xex = LittleFS.exists("/test.gif");
+  }
+
   // if(xex == false){ //file does not exist
   //     fileGif.write(ptrimagebuf,image_size);
   //     fileGif = LittleFS.open("/test.gif","w+");
   //     fileGif.close();
   // }
-  
+
   Serial.println("\nwriting");
-  fileGif = LittleFS.open("/test.gif","w+");
-  fileGif.write(ptrimagebuf,image_size);
+  fileGif = LittleFS.open("/test.gif", "w+");
+  fileGif.write(ptrimagebuf, image_size);
   // xex = LittleFS.exists("/test.gif");
   // Serial.printf("gif exists: %d\n",xex);
-  
+
   Serial.println("\nsetting callbacks");
-  decoder.setScreenClearCallback(screenClearCallback);
-  decoder.setUpdateScreenCallback(updateScreenCallback);
-  decoder.setDrawPixelCallback(drawPixelCallback);
 
-  decoder.setFileSeekCallback(fileSeekCallback);
-  decoder.setFilePositionCallback(filePositionCallback);
-  decoder.setFileReadCallback(fileReadCallback);
-  decoder.setFileReadBlockCallback(fileReadBlockCallback);
-
-
-
-    decoder.startDecoding();
-
-
+  //decoder.startDecoding();
 }
 
 void upng_allocation()
@@ -376,39 +364,46 @@ void upng_allocation()
   }
 }
 
-bool fileSeekCallback(unsigned long position) {
-  ptrCursor = position;
-  ptrCursor %= image_size;
-  return true;
-}
 
-unsigned long filePositionCallback(void) { 
-  ptrCursor %= image_size;
-  return ptrCursor;
-}
 
-int fileReadCallback(void) {
-    ptrCursor %= image_size;
-    return *(ptrimagebuf + ptrCursor++);
-}
+// bool fileSeekCallback(unsigned long position)
+// {
+//   ptrCursor = position;
+//   ptrCursor %= image_size;
+//   return true;
+// }
 
-int fileReadBlockCallback(void * buffer, int numberOfBytes) {
-    int readBytes = 0;
+// unsigned long filePositionCallback(void)
+// {
+//   ptrCursor %= image_size;
+//   return ptrCursor;
+// }
 
-    char* dbuf = (char*) buffer;
-    char* sbuf = (char*) ptrimagebuf;
-    
-    for(;readBytes<numberOfBytes;readBytes++){
-      dbuf[readBytes] = sbuf[ptrCursor++];
-    }
-    ptrCursor %= image_size;
-    return readBytes;
-}
+// int fileReadCallback(void)
+// {
+//   ptrCursor %= image_size;
+//   return *(ptrimagebuf + ptrCursor++);
+// }
 
-void updateScreenCallback(void) {  }
+// int fileReadBlockCallback(void *buffer, int numberOfBytes)
+// {
+//   int readBytes = 0;
 
-void screenClearCallback(void) {  }
+//   char *dbuf = (char *)buffer;
+//   char *sbuf = (char *)ptrimagebuf;
 
-void drawPixelCallback(int16_t x, int16_t y, uint8_t red, uint8_t green, uint8_t blue) {
-    ledMatrix.drawPixel(x,y,getColor(red,green,blue));
-}
+//   for (; readBytes < numberOfBytes; readBytes++)
+//   {
+//     dbuf[readBytes] = sbuf[ptrCursor++];
+//   }
+//   ptrCursor %= image_size;
+//   return readBytes;
+// }
+
+// void updateScreenCallback(void) {}
+
+// void screenClearCallback(void) {}
+
+// void drawPixelCallback(int16_t x, int16_t y, uint8_t red, uint8_t green, uint8_t blue)
+// {
+// }
