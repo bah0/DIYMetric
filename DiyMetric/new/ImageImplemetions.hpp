@@ -114,6 +114,8 @@ void GIFImage::updateScreenCallback(void){
 }
 
 void GIFImage::screenClearCallback(void){
+    Serial.println("resetted");
+    ledMatrix.clear();
 }
 
 void GIFImage::drawPixelCallback(int16_t x, int16_t y, uint8_t red, uint8_t green, uint8_t blue){

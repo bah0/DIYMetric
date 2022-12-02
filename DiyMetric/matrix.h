@@ -29,7 +29,8 @@ uint16_t textWidth, textHeight;
 ////////////////////////////
 
 void clearScreen(){
-    ledMatrix.fillScreen(0);  
+    ledMatrix.fillScreen(0);
+    
 }
 
 void drawScreen(){

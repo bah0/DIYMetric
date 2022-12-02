@@ -13,7 +13,8 @@
 #include "Time.hpp"
 
 
-class App : public WifiCallback{
+class App : public WifiCallback 
+{
     private:
         bool stopRequested = false;
 
@@ -28,9 +29,9 @@ class App : public WifiCallback{
         void Exit();
 
         // Wifi related methods - WifiConnection needs to be implemented here
-         void onWifiConnectedCallback();
-         void onWifiConnectingCallback();
-         void onWifiActiveCallback();
+        void onWifiConnectedCallback();
+        void onWifiConnectingCallback();
+        void onWifiActiveCallback();
 };
 
 // Default Constructor
@@ -47,8 +48,8 @@ void App::Setup(){
 void App::Loop(){
     Time::calculateDeltaTime();
     
-    //Update();
-    //Render();
+    Update();
+    Render();
 
     if(stopRequested){
         Exit();
@@ -96,7 +97,8 @@ void App::Update(){
 }
 
 void App::Render(){
-    clearScreen();
+    //clearScreen();
+    //ledMatrix.clear();
     imageLoader.Render();
     drawScreen();
 }
