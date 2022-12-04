@@ -205,14 +205,6 @@ void render(/* double dT */)
 void loop()
 {    
   app.Loop();
-  /* 
-  serialEvent();
-  refreshUtime();
-
-  update(deltaTime);
-  render();
-  */
-
 }
 
 void finish()
@@ -363,47 +355,3 @@ void upng_allocation()
     upng = NULL;
   }
 }
-
-
-
-// bool fileSeekCallback(unsigned long position)
-// {
-//   ptrCursor = position;
-//   ptrCursor %= image_size;
-//   return true;
-// }
-
-// unsigned long filePositionCallback(void)
-// {
-//   ptrCursor %= image_size;
-//   return ptrCursor;
-// }
-
-// int fileReadCallback(void)
-// {
-//   ptrCursor %= image_size;
-//   return *(ptrimagebuf + ptrCursor++);
-// }
-
-// int fileReadBlockCallback(void *buffer, int numberOfBytes)
-// {
-//   int readBytes = 0;
-
-//   char *dbuf = (char *)buffer;
-//   char *sbuf = (char *)ptrimagebuf;
-
-//   for (; readBytes < numberOfBytes; readBytes++)
-//   {
-//     dbuf[readBytes] = sbuf[ptrCursor++];
-//   }
-//   ptrCursor %= image_size;
-//   return readBytes;
-// }
-
-// void updateScreenCallback(void) {}
-
-// void screenClearCallback(void) {}
-
-// void drawPixelCallback(int16_t x, int16_t y, uint8_t red, uint8_t green, uint8_t blue)
-// {
-// }

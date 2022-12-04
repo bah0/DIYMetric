@@ -17,6 +17,9 @@ class App : public WifiCallback
 {
     private:
         bool stopRequested = false;
+        
+        WifiConnection wifiConn;
+        ImageLoader imageLoader;
 
     public:
         App();
@@ -48,8 +51,12 @@ void App::Setup(){
 void App::Loop(){
     Time::calculateDeltaTime();
     
+    clearScreen();
+
     Update();
     Render();
+    
+    drawScreen();
 
     if(stopRequested){
         Exit();
@@ -59,16 +66,14 @@ void App::Loop(){
 
 }
 
-// Variables
-WifiConnection wifiConn;
-ImageLoader imageLoader;
-
 // Methods
 void App::Init(){
     
     initMatrix();
 
-    wifiConn.Setup("xerazen", "ViennaCalling2308");
+    //wifiConn.Setup("xerazen", "ViennaCalling2308");
+    wifiConn.Setup("FRITZ!Box 6660 Cable RK", "88667528509661295011");
+
     wifiConn.Connect();
     wifiConn.setWifiCallback(this);
 
@@ -86,25 +91,20 @@ void App::onWifiConnectedCallback(){
 void App::onWifiActiveCallback(){
     //Serial.println("WIFI is active.");
     
-    imageLoader.LoadImageFromURL("a");
+    imageLoader.LoadImageFromURL("http://developer.lametric.com/content/apps/icon_thumbs/28585.gif");
     imageLoader.Update();
 
 }
-
 
 void App::Update(){
     wifiConn.waitForConnection();
 }
 
 void App::Render(){
-    //clearScreen();
-    //ledMatrix.clear();
     imageLoader.Render();
-    drawScreen();
 }
 
 void App::Exit(){
-
 }
 
 

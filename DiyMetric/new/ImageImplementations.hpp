@@ -7,6 +7,16 @@
 #include "Time.hpp"
 
 
+typedef struct GIFPoint {
+        uint8_t x;
+        uint8_t y;
+        uint8_t r;
+        uint8_t g;
+        uint8_t b;
+        uint8_t a;
+} GIFPoint;
+
+
 class GIFImage : public Image, public ImageCallback {
     private:
         uint16_t ptr_Cursor;
@@ -24,7 +34,9 @@ class GIFImage : public Image, public ImageCallback {
         void drawPixelCallback(int16_t x, int16_t y, uint8_t red, uint8_t green, uint8_t blue);
 
         GifDecoder<9, 9, 11> gifDecoder;
-        
+        GIFPoint points[8][8];
+        uint8_t pixelIterator;
+
         void startDecoding();
 
     protected:
@@ -70,7 +82,20 @@ void GIFImage::Render(){
         currentDelay = 0;
         
     }
-    //drawScreen();
+    
+    for(uint8_t y = 0; y < 8; y++){
+        for(uint8_t x = 0; x < 8; x++){
+            ledMatrix.drawPixel(points[y][x].x,
+                                points[y][x].y,
+                                getColor(points[y][x].r,
+                                         points[y][x].g,
+                                         points[y][x].b
+                                )
+            );
+        }
+    }
+
+    drawScreen();
 }
 
 void GIFImage::startDecoding(){
@@ -114,13 +139,30 @@ void GIFImage::updateScreenCallback(void){
 }
 
 void GIFImage::screenClearCallback(void){
-    Serial.println("resetted");
-    ledMatrix.clear();
+    
+    for(int y = 0; y < 8; y++)
+        for(int x = 0; x < 8; x++){
+            points[y][x].r = 0;
+            points[y][x].g = 0;
+            points[y][x].b = 0;
+        }
+            
 }
 
 void GIFImage::drawPixelCallback(int16_t x, int16_t y, uint8_t red, uint8_t green, uint8_t blue){
+    int i, j;
+    
+    i = pixelIterator / 8;
+    j = pixelIterator % 8;
 
-    ledMatrix.drawPixel(x, y, getColor(red, green, blue));
+    points[i][j].x = x;
+    points[i][j].y = y;
+    points[i][j].r = red;
+    points[i][j].g = green;
+    points[i][j].b = blue;
+    points[i][j].a = 255;
+
+    (++pixelIterator) %= 64;
 }
 
 

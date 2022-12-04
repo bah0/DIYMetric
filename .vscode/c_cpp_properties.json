@@ -9,7 +9,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "D:\\Dokumente\\Arduino\\libraries/**",
-                "C:\\Program Files (x86)\\Arduino\\libraries/**"
+                "C:\\Program Files (x86)\\Arduino\\libraries/**",
+                "C:\\Users\\bahadir.parmaksiz\\Documents\\Arduino\\libraries/**"
             ],
             "forcedInclude": [],
             "cStandard": "c17",
@@ -22,7 +23,7 @@
         },
         {
             "name": "Arduino",
-            "compilerPath": "C:\\Users\\baho\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.0.4-gcc10.3-1757bed\\bin\\xtensa-lx106-elf-g++",
+            "compilerPath": "C:\\Users\\bahadir.parmaksiz\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.0.4-gcc10.3-1757bed\\bin\\xtensa-lx106-elf-g++",
             "compilerArgs": [
                 "-U__STRICT_ANSI__",
                 "-w",
@@ -37,32 +38,30 @@
             ],
             "intelliSenseMode": "gcc-x64",
             "includePath": [
-                "C:\\Users\\baho\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\tools\\sdk\\include",
-                "C:\\Users\\baho\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\tools\\sdk\\lwip2\\include",
-                "C:\\Users\\baho\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\cores\\esp8266",
-                "C:\\Users\\baho\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\variants\\generic",
-                "C:\\Users\\baho\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\libraries\\Ticker\\src",
-                "D:\\Dokumente\\Arduino\\libraries\\Task_by_Makuna\\src",
-                "C:\\Users\\baho\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\libraries\\LittleFS\\src",
-                "D:\\Dokumente\\Arduino\\libraries\\Adafruit_GFX_Library",
-                "D:\\Dokumente\\Arduino\\libraries\\Adafruit_NeoPixel",
-                "D:\\Dokumente\\Arduino\\libraries\\Adafruit_NeoMatrix",
-                "C:\\Users\\baho\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\libraries\\ESP8266WiFi\\src",
-                "C:\\Users\\baho\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\libraries\\ESP8266HTTPClient\\src",
-                "D:\\Dokumente\\Arduino\\libraries\\NTPClient",
-                "C:\\Users\\baho\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\libraries\\SPI",
-                "c:\\users\\baho\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.0.4-gcc10.3-1757bed\\xtensa-lx106-elf\\include\\c++\\10.3.0",
-                "c:\\users\\baho\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.0.4-gcc10.3-1757bed\\xtensa-lx106-elf\\include\\c++\\10.3.0\\xtensa-lx106-elf",
-                "c:\\users\\baho\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.0.4-gcc10.3-1757bed\\xtensa-lx106-elf\\include\\c++\\10.3.0\\backward",
-                "c:\\users\\baho\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.0.4-gcc10.3-1757bed\\lib\\gcc\\xtensa-lx106-elf\\10.3.0\\include",
-                "c:\\users\\baho\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.0.4-gcc10.3-1757bed\\lib\\gcc\\xtensa-lx106-elf\\10.3.0\\include-fixed",
-                "c:\\users\\baho\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.0.4-gcc10.3-1757bed\\xtensa-lx106-elf\\include",
-                "${workspaceFolder}/**",
-                "D:\\Dokumente\\Arduino\\libraries/**",
-                "C:\\Program Files (x86)\\Arduino\\libraries/**"
+                "C:\\Users\\bahadir.parmaksiz\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\tools\\sdk\\include",
+                "C:\\Users\\bahadir.parmaksiz\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\tools\\sdk\\lwip2\\include",
+                "d:\\00_BahoPrivat\\00_projects\\DIYMetric\\build\\core",
+                "C:\\Users\\bahadir.parmaksiz\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\cores\\esp8266",
+                "C:\\Users\\bahadir.parmaksiz\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\variants\\generic",
+                "C:\\Users\\bahadir.parmaksiz\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\libraries\\Ticker\\src",
+                "C:\\Users\\bahadir.parmaksiz\\Documents\\Arduino\\libraries\\Task_by_Makuna\\src",
+                "C:\\Users\\bahadir.parmaksiz\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\libraries\\LittleFS\\src",
+                "C:\\Users\\bahadir.parmaksiz\\Documents\\Arduino\\libraries\\Adafruit_GFX_Library",
+                "C:\\Users\\bahadir.parmaksiz\\Documents\\Arduino\\libraries\\Adafruit_NeoPixel",
+                "C:\\Users\\bahadir.parmaksiz\\Documents\\Arduino\\libraries\\Adafruit_NeoMatrix",
+                "C:\\Users\\bahadir.parmaksiz\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\libraries\\ESP8266WiFi\\src",
+                "C:\\Users\\bahadir.parmaksiz\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\libraries\\ESP8266HTTPClient\\src",
+                "C:\\Users\\bahadir.parmaksiz\\Documents\\Arduino\\libraries\\NTPClient",
+                "C:\\Users\\bahadir.parmaksiz\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\libraries\\SPI",
+                "c:\\users\\bahadir.parmaksiz\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.0.4-gcc10.3-1757bed\\xtensa-lx106-elf\\include\\c++\\10.3.0",
+                "c:\\users\\bahadir.parmaksiz\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.0.4-gcc10.3-1757bed\\xtensa-lx106-elf\\include\\c++\\10.3.0\\xtensa-lx106-elf",
+                "c:\\users\\bahadir.parmaksiz\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.0.4-gcc10.3-1757bed\\xtensa-lx106-elf\\include\\c++\\10.3.0\\backward",
+                "c:\\users\\bahadir.parmaksiz\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.0.4-gcc10.3-1757bed\\lib\\gcc\\xtensa-lx106-elf\\10.3.0\\include",
+                "c:\\users\\bahadir.parmaksiz\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.0.4-gcc10.3-1757bed\\lib\\gcc\\xtensa-lx106-elf\\10.3.0\\include-fixed",
+                "c:\\users\\bahadir.parmaksiz\\appdata\\local\\arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.0.4-gcc10.3-1757bed\\xtensa-lx106-elf\\include"
             ],
             "forcedInclude": [
-                "C:\\Users\\baho\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\cores\\esp8266\\Arduino.h"
+                "C:\\Users\\bahadir.parmaksiz\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\cores\\esp8266\\Arduino.h"
             ],
             "cStandard": "c11",
             "cppStandard": "c++17",

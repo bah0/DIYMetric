@@ -4,7 +4,7 @@
 #define IL_ARRAYSIZE 6
 
 #include <Arduino.h>
-#include "ImageImplemetions.hpp"
+#include "ImageImplementations.hpp"
 #include "WifiConnection.hpp"
 
 
@@ -101,7 +101,7 @@ int ImageLoader::DownloadBitmap(String url, unsigned char* data ){
 void ImageLoader::LoadImageFromURL(String url){
   if(!imageLoaded){
 
-    int len = DownloadBitmap("http://developer.lametric.com/content/apps/icon_thumbs/1443.gif", image.getImagePtr());
+    int len = DownloadBitmap(url, image.getImagePtr());
     image.setImageSize(len);
     image.Init();
     imageLoaded = true;

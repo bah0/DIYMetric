@@ -91,7 +91,7 @@ void WifiConnection::waitForConnection() //Wifi Event handling and calling the c
 
     switch (isConnected()) // TODO: offload every outcome into seperate private methods to make this code readable
     {
-        case WL_IDLE_STATUS: // is this triggered while connecting?
+        case WL_IDLE_STATUS:
             break;
 
         case WL_NO_SSID_AVAIL:
